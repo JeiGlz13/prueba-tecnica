@@ -13,8 +13,8 @@ export const Navbar = () => {
         className = 'w-36 xs:w-32 md:w-32 transition-all duration-200 ' />
       </Link>
 
-      <div className='w-6/12 hidden sm:flex flex-row justify-end items-end px-2 lg:px-16 '>
-        <div className='w-full md:w-11/12 lg:w-10/12 flex justify-between px-8 md:px-12 lg:px-16 ' >
+      <div className='max-w-10/12 hidden sm:flex flex-row justify-end items-end px-2 lg:px-16 '>
+        <div className=' flex justify-between flex-wrap px-8 md:px-12 lg:px-16 ' >
             {
               routerData.map(({label, to, id}) => (
                 <NavbarLinks title={label} link={to} key={id} />

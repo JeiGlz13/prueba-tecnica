@@ -43,6 +43,8 @@ const validationSchema = Yup.object({
 
 const valuesToSave = (values: initialValuesInterface) => {
     const birthDay = getBirthDayFromCedula(values.cedula);
+    if (typeof birthDay !== 'string') return;
+    
     const dataToSave = {
         ...values,
         fechaNacimiento: birthDay
@@ -52,8 +54,11 @@ const valuesToSave = (values: initialValuesInterface) => {
 
 const onSubmit = (values: initialValuesInterface, resetForm: (nextState?: Partial<FormikState<initialValuesInterface>> | undefined | {[key: string]: string}) => void) =>{
     const {cedula, numeroINSS} = values;
-    if ((cedula.endsWith('_')) || numeroINSS.endsWith('_')) return Swal.fire('Oops...', 'Rellene los campos correctamente', 'error');
+    if ((cedula.includes('_')) || numeroINSS.includes('_')) return Swal.fire('Oops...', 'Rellene los campos correctamente', 'error');
+    
     const dataToSave = valuesToSave(values);
+    if (!dataToSave) return;
+    
     //TODO: Enviar a la API
     console.log(dataToSave);
     resetForm({values: ''});
