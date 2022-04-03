@@ -2,6 +2,7 @@ import { employeeInfoInterface } from "../../interfaces/interfaces"
 import { useDispatch } from 'react-redux';
 import { deleteEmployee, employeeOpen, setActiveEmployee } from '../../redux/actions/employeeAction';
 import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 export const GridItems = ({
     uid,
@@ -17,7 +18,20 @@ export const GridItems = ({
 
     const handleDelete = (e: any) => {
         e.preventDefault();
-        dispatch(deleteEmployee(uid!));
+        Swal.fire({
+          title: '¿Desea borrar el empleado?',
+          text: "¡No podrá deshacer esta acción!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Borrar',
+          cancelButtonText: 'Cancelar'
+      }).then((result) => {
+          if (result.value) {
+              dispatch(deleteEmployee(uid!));
+          }
+      });
     }
 
     const handleUpdate = (e:any)=>{

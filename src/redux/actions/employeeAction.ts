@@ -1,39 +1,31 @@
 import { employeeInfoInterface } from '../../interfaces/interfaces';
+import { employeeActions } from '../types/types';
 
- export type employeeActions = 
-    | { type: 'employee add', payload: {employee: employeeInfoInterface} }
-    | { type: 'employee update', payload:  employeeInfoInterface }
-    | { type: 'employee delete', payload: string }
-    | { type: 'employee open', payload: employeeInfoInterface }
-    | { type: 'employee close' }
-    | { type: 'set active employee', payload: employeeInfoInterface }
-    | { type: 'employee clear' }
-
-export const addEmployee = (employee: employeeInfoInterface) => ({
+export const addEmployee = (employee: employeeInfoInterface): employeeActions => ({
     type: 'employee add',
     payload: {
         employee
     }
 })
 
-export const updateEmploye = (employee: employeeInfoInterface) => ({
+export const updateEmploye = (employee: employeeInfoInterface): employeeActions => ({
     type: 'employee update',
-payload: employee
+    payload: employee
 })
 
-export const deleteEmployee = (cedula: string) => ({
+export const deleteEmployee = (uid: string): employeeActions => ({
     type: 'employee delete',
-    payload: cedula
+    payload: uid
 });
 
-export const setActiveEmployee = (employee: employeeInfoInterface) => ({
+export const setActiveEmployee = (employee: employeeInfoInterface): employeeActions => ({
     type: 'set active employee',
     payload: employee
 })
 
-export const employeeOpen = (employee: employeeInfoInterface) => ({
+export const employeeOpen = (employee: employeeInfoInterface): employeeActions => ({
     type: 'employee open',
     payload: employee
 });
-export const employeeClose = () => ({type: 'employee close'});
-export const employeeClear = () => ({type: 'employee clear'});
+export const employeeClose = (): employeeActions => ({type: 'employee close'});
+export const employeeClear = (): employeeActions => ({type: 'employee clear'});

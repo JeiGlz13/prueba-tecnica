@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addEmployee, updateEmploye } from '../../redux/actions/employeeAction';
 import { useNavigate } from 'react-router-dom';
 import uuid from 'uuid-random';
+import { checkExistingProperty, checkExistingPropertyUpdating } from '../../helpers/checkExistingProperty';
 
 export const RegisterForm = () => {
-    const {activeEmployee} = useSelector((state: any) => state.employees);
+const {activeEmployee, employees} = useSelector((state: any) => state.employees);
 const dispatch = useDispatch();
 const navigate = useNavigate();
 
@@ -25,8 +26,6 @@ let initialForm: employeeInfoInterface  = {
 }
 
 if (activeEmployee) {initialForm = activeEmployee}
-
-
 
 const validationSchema = Yup.object({
     nombres: Yup.string()
@@ -56,7 +55,7 @@ const valuesToSave = (values: employeeInfoInterface) => {
 }
 
 const onSubmit = (values: employeeInfoInterface, resetForm: (nextState?: Partial<FormikState<employeeInfoInterface>> | undefined | {[key: string]: string}) => void) =>{
-    const {cedula, numeroINSS} = values;
+    const {cedula, numeroINSS, email} = values;
     if ((cedula.includes('_')) || numeroINSS.includes('_')) return Swal.fire('Oops...', 'Rellene los campos correctamente', 'error');
     
     const dataToSave = valuesToSave(values);
@@ -64,17 +63,24 @@ const onSubmit = (values: employeeInfoInterface, resetForm: (nextState?: Partial
     
     //TODO: Enviar a la API
     if (activeEmployee) {
+        if(checkExistingPropertyUpdating(activeEmployee.uid, cedula, 'cedula', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con esta cédula', 'error');
+        if(checkExistingPropertyUpdating(activeEmployee.uid, numeroINSS, 'numeroINSS', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este No. INSS', 'error');
+        if(checkExistingPropertyUpdating(activeEmployee.uid, email, 'email', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este email', 'error');
+
         dispatch(updateEmploye(dataToSave));
         resetForm({values: ''});
         navigate('/'); 
         return;
     }
 
+    if(checkExistingProperty(cedula, 'cedula', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con esta cédula', 'error');
+    if(checkExistingProperty(numeroINSS, 'numeroINSS', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este No. INSS', 'error');
+    if(checkExistingProperty(email, 'email', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este email', 'error');
+
     const uid = uuid();
-    
     const newEmploye = {
         uid,
-        ...values
+        ...dataToSave
     }
     dispatch(addEmployee(newEmploye))    
     resetForm({values: ''});

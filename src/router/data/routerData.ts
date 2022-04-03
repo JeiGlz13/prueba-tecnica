@@ -1,4 +1,5 @@
 import { EmployeesScreen, RegisterScreen } from "../../screens";
+import { ApiScreen } from '../../screens/ApiScreen';
 
 type JSXComponent = () => JSX.Element;
 
@@ -21,6 +22,12 @@ export const routerData: RouterData[] = [
         to: '/nuevo',
         label: 'Registrar',
         Component: RegisterScreen,
+    },
+    {
+        id: 3,
+        to: '/api',
+        label: 'API',
+        Component: ApiScreen,
     },
     
 ]
