@@ -7,9 +7,8 @@ import { MyMaskedInput } from './MyMaskedInput';
 import { getBirthDayFromCedula } from '../../helpers';
 import { employeeInfoInterface } from '../../interfaces/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { addEmployee, updateEmploye } from '../../redux/actions/employeeAction';
+import { employeeStartAddNew, startUpdatingEmployee } from '../../redux/actions/employeeAction';
 import { useNavigate } from 'react-router-dom';
-import uuid from 'uuid-random';
 import { checkExistingProperty, checkExistingPropertyUpdating } from '../../helpers/checkExistingProperty';
 
 export const RegisterForm = () => {
@@ -63,11 +62,11 @@ const onSubmit = (values: employeeInfoInterface, resetForm: (nextState?: Partial
     
     //TODO: Enviar a la API
     if (activeEmployee) {
-        if(checkExistingPropertyUpdating(activeEmployee.uid, cedula, 'cedula', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con esta cédula', 'error');
-        if(checkExistingPropertyUpdating(activeEmployee.uid, numeroINSS, 'numeroINSS', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este No. INSS', 'error');
-        if(checkExistingPropertyUpdating(activeEmployee.uid, email, 'email', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este email', 'error');
+        if(checkExistingPropertyUpdating(activeEmployee.id, cedula, 'cedula', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con esta cédula', 'error');
+        if(checkExistingPropertyUpdating(activeEmployee.id, numeroINSS, 'numeroINSS', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este No. INSS', 'error');
+        if(checkExistingPropertyUpdating(activeEmployee.id, email, 'email', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este email', 'error');
 
-        dispatch(updateEmploye(dataToSave));
+        dispatch(startUpdatingEmployee(dataToSave));
         resetForm({values: ''});
         navigate('/'); 
         return;
@@ -77,12 +76,7 @@ const onSubmit = (values: employeeInfoInterface, resetForm: (nextState?: Partial
     if(checkExistingProperty(numeroINSS, 'numeroINSS', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este No. INSS', 'error');
     if(checkExistingProperty(email, 'email', employees)) return Swal.fire('Oops...', 'Ya existe un empleado con este email', 'error');
 
-    const uid = uuid();
-    const newEmploye = {
-        uid,
-        ...dataToSave
-    }
-    dispatch(addEmployee(newEmploye))    
+    dispatch(employeeStartAddNew(dataToSave))    
     resetForm({values: ''});
     navigate('/');
 }

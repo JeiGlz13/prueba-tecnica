@@ -1,11 +1,11 @@
 import { employeeInfoInterface } from "../../interfaces/interfaces"
 import { useDispatch } from 'react-redux';
-import { deleteEmployee, employeeOpen, setActiveEmployee } from '../../redux/actions/employeeAction';
+import { startDeletingEmployee, employeeOpen, setActiveEmployee } from '../../redux/actions/employeeAction';
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
 export const GridItems = ({
-    uid,
+    id,
     nombres,
     apellidos,
     email,
@@ -29,21 +29,21 @@ export const GridItems = ({
           cancelButtonText: 'Cancelar'
       }).then((result) => {
           if (result.value) {
-              dispatch(deleteEmployee(uid!));
+              dispatch(startDeletingEmployee(id!));
           }
       });
     }
 
     const handleUpdate = (e:any)=>{
         e.preventDefault();
-        const activeEmployee = {uid, nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
+        const activeEmployee = {id, nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
         dispatch(setActiveEmployee(activeEmployee));
         navigate('/editar');
     }
 
     const handleView = (e:any) => {
         e.preventDefault();
-        const activeEmployee = {uid, nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
+        const activeEmployee = {id, nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
         dispatch(employeeOpen(activeEmployee))
     }
 

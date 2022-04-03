@@ -35,7 +35,7 @@ export const EmployeesGrid = () => {
     <div className="w-11/12 mx-10 flex flex-col" >
       <div className='w-full flex flex-row justify-start items-center flex-wrap mt-4'>
     
-          <div className="flex flex-col w-10/12" >
+          <div className="flex flex-col w-full" >
             <h1 className = 'font-semibold mb-2 text-xl ' >
                 Buscar por cédula
             </h1>

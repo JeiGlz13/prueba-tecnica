@@ -3,8 +3,18 @@ import { Routes, Route } from 'react-router-dom';
 import { RegisterScreen } from '../screens';
 import { routerData } from './data/routerData';
 import { Navbar } from './Navbar';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { employeeStartLoading } from '../redux/actions/employeeAction';
 
 export const AppRouter = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(employeeStartLoading())
+  }, [dispatch])
+  
+
   return (
       <BrowserRouter>
               <Navbar/>

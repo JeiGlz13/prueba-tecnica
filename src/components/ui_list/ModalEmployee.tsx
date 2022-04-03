@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployee, employeeClose, setActiveEmployee } from '../../redux/actions/employeeAction';
+import { startDeletingEmployee, employeeClose, setActiveEmployee } from '../../redux/actions/employeeAction';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 export const ModalEmployee = () => {
     const {activeEmployee} = useSelector((state: any) => state.employees);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const {uid, nombres, cedula, apellidos, fechaNacimiento, numeroINSS, email} = activeEmployee;
+    const {id, nombres, cedula, apellidos, fechaNacimiento, numeroINSS, email} = activeEmployee;
 
     const setClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
         e.preventDefault();
@@ -26,7 +26,7 @@ export const ModalEmployee = () => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                dispatch(deleteEmployee(uid));
+                dispatch(startDeletingEmployee(id));
             }
         })
     }

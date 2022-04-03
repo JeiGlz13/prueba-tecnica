@@ -10,6 +10,12 @@ const initialState = {
 export const employeeReducer =  (state = initialState, action:employeeActions) => {
   switch (action.type) {
 
+    case 'employees load':
+        return {
+            ...state,
+            employees: [...action.payload]
+        }
+
   case 'employee add':
     return { ...state,
             employees: [...state.employees, 
@@ -17,13 +23,13 @@ export const employeeReducer =  (state = initialState, action:employeeActions) =
 
     case 'employee update':
         return { ...state,
-                employees: state.employees.map((employee: employeeInfoInterface) => employee.uid === action.payload.uid ? action.payload : employee) ,
+                employees: state.employees.map((employee: employeeInfoInterface) => employee.id === action.payload.id ? action.payload : employee) ,
                 activeEmployee: null
             }
 
     case 'employee delete':
         return { ...state,
-            employees: state.employees.filter((employee: employeeInfoInterface) => employee.uid !== action.payload), 
+            employees: state.employees.filter((employee: employeeInfoInterface) => employee.id !== action.payload), 
             activeEmployee: null,
             modal:false
         }

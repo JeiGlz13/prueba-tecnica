@@ -18,8 +18,8 @@ export const checkExistingProperty = (property: string, propertyToCheck: string,
     return exist;
 }
 
-export const checkExistingPropertyUpdating = (uid: string, property: string, propertyToCheck: string,  employees: employeeInfoInterface[] | []) => {
-    const myNewArray = employees.filter((employee: any) => employee.uid !== uid);
+export const checkExistingPropertyUpdating = (id: string, property: string, propertyToCheck: string,  employees: employeeInfoInterface[] | []) => {
+    const myNewArray = employees.filter((employee: any) => employee.id !== id);
     const exist = checkExistingLoop(myNewArray, property, propertyToCheck);
     return exist
 }
