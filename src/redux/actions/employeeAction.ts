@@ -7,6 +7,7 @@ import { employeeInfoInterface } from '../../interfaces/interfaces';
     | { type: 'employee open', payload: employeeInfoInterface }
     | { type: 'employee close' }
     | { type: 'set active employee', payload: employeeInfoInterface }
+    | { type: 'employee clear' }
 
 export const addEmployee = (employee: employeeInfoInterface) => ({
     type: 'employee add',
@@ -35,3 +36,4 @@ export const employeeOpen = (employee: employeeInfoInterface) => ({
     payload: employee
 });
 export const employeeClose = () => ({type: 'employee close'});
+export const employeeClear = () => ({type: 'employee clear'});

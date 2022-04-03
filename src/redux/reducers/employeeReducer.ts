@@ -3,6 +3,7 @@ import { employeeActions } from "../actions/employeeAction";
 const initialState = {
     employees: [
         {
+            uid: '12345678',
             nombres: "Juan",
             apellidos: "Perez",
             email: "juanperez@gmail.com",
@@ -25,13 +26,13 @@ export const employeeReducer =  (state = initialState, action:employeeActions) =
 
     case 'employee update':
         return { ...state,
-                employees: state.employees.map(employee => employee.cedula === action.payload.cedula ? action.payload : employee) ,
+                employees: state.employees.map(employee => employee.uid === action.payload.uid ? action.payload : employee) ,
                 activeEmployee: null
             }
 
     case 'employee delete':
         return { ...state,
-            employees: state.employees.filter(employee => employee.cedula !== action.payload), 
+            employees: state.employees.filter(employee => employee.uid !== action.payload), 
             activeEmployee: null,
             modal:false
         }
@@ -53,6 +54,12 @@ export const employeeReducer =  (state = initialState, action:employeeActions) =
             activeEmployee: action.payload,
             modal: false
         }
+
+    case 'employee clear':
+        return { ...state,
+        activeEmployee: null,
+        modal: false
+    }
 
   default:
     return state

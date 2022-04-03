@@ -1,4 +1,5 @@
 export interface employeeInfoInterface {
+    uid?: string;
     nombres: string;
     apellidos: string;
     email: string;

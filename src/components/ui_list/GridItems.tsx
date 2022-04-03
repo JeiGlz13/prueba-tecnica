@@ -4,6 +4,7 @@ import { deleteEmployee, employeeOpen, setActiveEmployee } from '../../redux/act
 import { useNavigate } from 'react-router-dom';
 
 export const GridItems = ({
+    uid,
     nombres,
     apellidos,
     email,
@@ -14,21 +15,21 @@ export const GridItems = ({
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleDelete = (e: any, id: string) => {
+    const handleDelete = (e: any) => {
         e.preventDefault();
-        dispatch(deleteEmployee(id));
+        dispatch(deleteEmployee(uid!));
     }
 
     const handleUpdate = (e:any)=>{
         e.preventDefault();
-        const activeEmployee = {nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
+        const activeEmployee = {uid, nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
         dispatch(setActiveEmployee(activeEmployee));
         navigate('/editar');
     }
 
     const handleView = (e:any) => {
         e.preventDefault();
-        const activeEmployee = {nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
+        const activeEmployee = {uid, nombres, apellidos, email, cedula, numeroINSS, fechaNacimiento}
         dispatch(employeeOpen(activeEmployee))
     }
 
@@ -49,7 +50,7 @@ export const GridItems = ({
                       title="Editar" className="bg-blue-500 rounded-md w-10 h-10 mx-1 text-white hover:shadow-lg text-lg">
                         <i className="fa-solid fa-user-pen"></i>
                       </button>
-                    <button onClick={(e) => handleDelete(e, cedula) } 
+                    <button onClick={(e) => handleDelete(e) } 
                       title="Borrar" className="bg-red-500 rounded-md w-10 h-10 mx-1 text-white hover:shadow-lg text-lg">
                         <i className="fa-solid fa-trash-can"></i>
                       </button>

@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
 import { EmployeesGrid } from "./EmployeesGrid";
 import { NoEmployeesIMG } from "./NoEmployeesIMG";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ModalEmployee } from "./ModalEmployee";
+import { useEffect } from 'react';
+import { employeeClear } from '../../redux/actions/employeeAction';
 
 export const EmployeesList = () => {
   const { employees, modal, activeEmployee } = useSelector((state: any) => state.employees);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(employeeClear());
+  }, [])
+  
   return (
     <div className="flex flex-col w-full justify-center items-center mt-10">
       {

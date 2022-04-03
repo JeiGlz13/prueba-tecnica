@@ -1,18 +1,26 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployee, employeeClose } from '../../redux/actions/employeeAction';
+import { deleteEmployee, employeeClose, setActiveEmployee } from '../../redux/actions/employeeAction';
+import { useNavigate } from 'react-router-dom';
 export const ModalEmployee = () => {
     const {activeEmployee} = useSelector((state: any) => state.employees);
     const dispatch = useDispatch();
-    const {nombres, cedula, apellidos, fechaNacimiento, numeroINSS, email} = activeEmployee;
+    const navigate = useNavigate();
+    const {uid, nombres, cedula, apellidos, fechaNacimiento, numeroINSS, email} = activeEmployee;
 
     const setClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
         e.preventDefault();
         dispatch(employeeClose())
     }
 
-    const handleDelete = (e: any, id: string) => {
+    const handleDelete = (e: any) => {
         e.preventDefault();
-        dispatch(deleteEmployee(id));
+        dispatch(deleteEmployee(uid));
+    }
+
+    const handleEdit = (e: any) =>{
+        e.preventDefault();
+        dispatch(setActiveEmployee(activeEmployee));
+        navigate('/editar');
     }
 
   return (
@@ -22,7 +30,7 @@ export const ModalEmployee = () => {
         
             <div className="bg-white transition shadow-xl w-full h-full rounded-3xl absolute flex flex-col items-start px-6 xs:px-10 sm:px-16 md:px-14 py-6 md:py-10">
                 <div className=' relative z-50 w-full flex flex-row justify-end items-center mb-0.5 md:mb-2' >
-                    <button className=' w-8 xs:w-8 md:w-12 h-8 xs:h-8 md:h-12 rounded-full border-2 border-solid border-green-800'
+                    <button title='cerrar' className=' w-8 xs:w-8 md:w-12 h-8 xs:h-8 md:h-12 rounded-full border-2 border-solid border-green-800'
                     onClick={(e) =>setClose(e)} >
                         <i className="fa-solid fa-x text-rojoPokemon"></i>
                     </button>
@@ -63,11 +71,12 @@ export const ModalEmployee = () => {
                 </div>
                 
                 <div className='w-full flex flex-row justify-between mt-10 px-16' >
-                      <button title="Editar" className="bg-blue-500 rounded-full w-16 h-16 mx-1 text-white hover:shadow-lg text-lg">
+                      <button onClick={(e) => handleEdit(e)} 
+                      title="Editar" className="bg-blue-500 rounded-full w-16 h-16 mx-1 text-white hover:shadow-lg text-lg">
                         <i className="fa-solid fa-user-pen text-2xl"></i>
                       </button>
 
-                      <button onClick={(e) => handleDelete(e, cedula) } 
+                      <button onClick={(e) => handleDelete(e) } 
                       title="Borrar" className="bg-red-500 rounded-full w-16 h-16 mx-1 text-white hover:shadow-lg text-lg">
                         <i className="fa-solid fa-trash-can text-2xl"></i>
                       </button>

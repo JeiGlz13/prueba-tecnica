@@ -1,6 +1,7 @@
 import {Formik, Form, FormikState,} from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
+
 import { MyTextInput } from './MyTextInput';
 import { MyMaskedInput } from './MyMaskedInput';
 import { getBirthDayFromCedula } from '../../helpers';
@@ -8,6 +9,7 @@ import { employeeInfoInterface } from '../../interfaces/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEmployee, updateEmploye } from '../../redux/actions/employeeAction';
 import { useNavigate } from 'react-router-dom';
+import uuid from 'uuid-random';
 
 export const RegisterForm = () => {
     const {activeEmployee} = useSelector((state: any) => state.employees);
@@ -63,10 +65,18 @@ const onSubmit = (values: employeeInfoInterface, resetForm: (nextState?: Partial
     //TODO: Enviar a la API
     if (activeEmployee) {
         dispatch(updateEmploye(dataToSave));
-    }else{
-        dispatch(addEmployee(values))
+        resetForm({values: ''});
+        navigate('/'); 
+        return;
     }
-        
+
+    const uid = uuid();
+    
+    const newEmploye = {
+        uid,
+        ...values
+    }
+    dispatch(addEmployee(newEmploye))    
     resetForm({values: ''});
     navigate('/');
 }
