@@ -4,24 +4,27 @@ import Swal from 'sweetalert2';
 import { MyTextInput } from './MyTextInput';
 import { MyMaskedInput } from './MyMaskedInput';
 import { getBirthDayFromCedula } from '../../helpers';
+import { employeeInfoInterface } from '../../interfaces/interfaces';
+import { useDispatch, useSelector } from 'react-redux';
+import { addEmployee, updateEmploye } from '../../redux/actions/employeeAction';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterForm = () => {
+    const {activeEmployee} = useSelector((state: any) => state.employees);
+const dispatch = useDispatch();
+const navigate = useNavigate();
 
-    interface initialValuesInterface {
-        nombres: string;
-        apellidos: string;
-        email: string;
-        cedula: string;
-        numeroINSS: string;
-    }
-
-const initialForm: initialValuesInterface = {
+let initialForm: employeeInfoInterface  = {
     nombres: '',
     apellidos: '',
     email: '',
     cedula: '',
     numeroINSS: '',
 }
+
+if (activeEmployee) {initialForm = activeEmployee}
+
+
 
 const validationSchema = Yup.object({
     nombres: Yup.string()
@@ -36,12 +39,10 @@ const validationSchema = Yup.object({
     cedula: Yup.string()
             .required('La cedula es obligatoria'),
     numeroINSS: Yup.string()
-            .min(9, 'Debe tener 9 caracteres')
-            .max(9, 'Debe tener 9 caracteres')
             .required('El numero de INSS es obligatorio')
 });
 
-const valuesToSave = (values: initialValuesInterface) => {
+const valuesToSave = (values: employeeInfoInterface) => {
     const birthDay = getBirthDayFromCedula(values.cedula);
     if (typeof birthDay !== 'string') return;
     
@@ -52,7 +53,7 @@ const valuesToSave = (values: initialValuesInterface) => {
     return dataToSave;
 }
 
-const onSubmit = (values: initialValuesInterface, resetForm: (nextState?: Partial<FormikState<initialValuesInterface>> | undefined | {[key: string]: string}) => void) =>{
+const onSubmit = (values: employeeInfoInterface, resetForm: (nextState?: Partial<FormikState<employeeInfoInterface>> | undefined | {[key: string]: string}) => void) =>{
     const {cedula, numeroINSS} = values;
     if ((cedula.includes('_')) || numeroINSS.includes('_')) return Swal.fire('Oops...', 'Rellene los campos correctamente', 'error');
     
@@ -60,8 +61,14 @@ const onSubmit = (values: initialValuesInterface, resetForm: (nextState?: Partia
     if (!dataToSave) return;
     
     //TODO: Enviar a la API
-    console.log(dataToSave);
+    if (activeEmployee) {
+        dispatch(updateEmploye(dataToSave));
+    }else{
+        dispatch(addEmployee(values))
+    }
+        
     resetForm({values: ''});
+    navigate('/');
 }
 
   return (
@@ -106,7 +113,9 @@ const onSubmit = (values: initialValuesInterface, resetForm: (nextState?: Partia
                                 <button type='submit' title='Guardar'
                                 className='text-white flex items-center font-semibold bg-verdeSER hover:bg-green-800 transition-all duration-150 py-2 px-8 text-xl rounded-lg' >
                                     <i className="fa-solid fa-floppy-disk mr-3"></i>
-                                    Guardar
+                                    {
+                                        (activeEmployee)?'Actualizar':'Guardar'
+                                    }
                                 </button>
                             </div>
                         </Form>
